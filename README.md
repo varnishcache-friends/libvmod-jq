@@ -1,7 +1,7 @@
 libvmod-jq
 ==========
 
-[![Build Status](https://travis-ci.org/fgsch/libvmod-jq.svg?branch=master)](https://travis-ci.org/fgsch/libvmod-jq)
+[![Build Status](https://travis-ci.org/fgsch/libvmod-jq.svg?branch=devel)](https://travis-ci.org/fgsch/libvmod-jq)
 
 ## About
 
