@@ -96,6 +96,14 @@ vmod_parse(VRT_CTX, struct vmod_priv *priv, VCL_ENUM from, VCL_STRING s)
 			VSLb(ctx->vsl, SLT_Debug,
 			    "jq.parse: Using request, input ignored");
 
+		CHECK_OBJ_ORNULL(ctx->req, REQ_MAGIC);
+		if (!ctx->req) {
+			VSLb(ctx->vsl, SLT_Error,
+			    "jq.parse: Cannot parse request from"
+			    " vcl_backend_*");
+			return (0);
+		}
+
 		if (ctx->req->req_bodybytes <= 0) {
 			VSLb(ctx->vsl, SLT_Error,
 			    "jq.parse: Uncached or no request body");

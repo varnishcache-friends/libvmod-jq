@@ -45,6 +45,7 @@ ERRORS
 
 * "jq.parse: Missing input"
 * "jq.parse: Using request, input ignored"
+* "jq.parse: Cannot parse request from vcl_backend_*"
 * "jq.parse: Uncached or no request body"
 * "jq.parse: Problem fetching the body"
 * "jq.parse: %s"

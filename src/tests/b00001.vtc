@@ -13,6 +13,10 @@ varnish v1 -vcl+backend {
 		std.cache_req_body(100B);
 	}
 
+	sub vcl_backend_fetch {
+		jq.parse(request);
+	}
+
 	sub vcl_deliver {
 		jq.parse(string, req.http.nonexistent);
 		jq.parse(string, "[");
@@ -29,6 +33,7 @@ varnish v1 -vcl+backend {
 } -start
 
 logexpect l1 -v v1 {
+	expect * * Error	{jq.parse: Cannot parse request from vcl_backend_*}
 	expect * * Error	{jq.parse: Missing input}
 	expect * * Error	{jq.parse: Unfinished JSON term at EOF at}
 	expect * * Debug	{jq.parse: Using request, input ignored}
