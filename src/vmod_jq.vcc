@@ -1,0 +1,66 @@
+#
+# Copyright (c) 2018, Federico G. Schwindt <fgsch@lodoss.net>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+$Module jq 3 Varnish JSON processor Module
+
+DESCRIPTION
+===========
+
+$Function BOOL parse(PRIV_TASK, ENUM { request, string }, STRING input="")
+
+$Function STRING get(PRIV_TASK, STRING filter, STRING error,
+    BOOL ascii=0, BOOL raw=0)
+
+$Function BOOL is_a(PRIV_TASK,
+    ENUM { invalid, null, false, true, number, string, array, object })
+
+$Function INT length(PRIV_TASK)
+
+ERRORS
+======
+
+* "jq.parse: Missing input"
+* "jq.parse: Using request, input ignored"
+* "jq.parse: Uncached or no request body"
+* "jq.parse: Problem fetching the body"
+* "jq.parse: %s"
+* "jq.get: No context"
+* "jq.get: Missing filter"
+* "jq.get: Out of memory"
+* "jq.get: Invalid filter"
+* "jq.get: %s"
+* "jq.is_a: No context"
+* "jq.length: No context"
+* "jq.length: Invalid object"
+* "jq.length: %s type has no length"
+
+SEE ALSO
+========
+
+* `varnishlog(1)`
+* `vsl(7)`
+* `Command-line JSON processor <https://stedolan.github.io/jq/>`

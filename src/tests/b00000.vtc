@@ -1,0 +1,54 @@
+varnishtest "Test basic functionality"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+varnish v1 -vcl+backend {
+	import jq from "${vmod_topbuild}/src/.libs/libvmod_jq.so";
+	import std;
+
+	sub vcl_recv {
+		std.cache_req_body(100B);
+	}
+
+	sub vcl_deliver {
+		jq.parse(string, "[1, 2, 3, 4, 5]");
+		set resp.http.length0 = jq.length();
+		jq.parse(request);
+		set resp.http.length1 = jq.length();
+		set resp.http.invalid = jq.is_a(invalid);
+		set resp.http.null = jq.is_a(null);
+		set resp.http.false = jq.is_a(false);
+		set resp.http.true = jq.is_a(true);
+		set resp.http.number = jq.is_a(number);
+		set resp.http.string = jq.is_a(string);
+		set resp.http.array = jq.is_a(array);
+		set resp.http.object = jq.is_a(object);
+		set resp.http.result =
+		    jq.get(".[0] | to_entries[] | .key", "error");
+		set resp.http.result_raw =
+		    jq.get(".[0] | to_entries[] | .key", "error", raw=true);
+		set resp.http.result_ascii =
+		    jq.get(".[0] | to_entries[] | .key", "error", ascii=true);
+	}
+} -start
+
+client c1 {
+	txreq -body {[{ "かぎ": null }, false, true, 1.0]}
+	rxresp
+	expect resp.http.length0 == 5
+	expect resp.http.length1 == 4
+	expect resp.http.invalid == false
+	expect resp.http.null == false
+	expect resp.http.false == false
+	expect resp.http.true == false
+	expect resp.http.number == false
+	expect resp.http.string == false
+	expect resp.http.array == true
+	expect resp.http.object == false
+	expect resp.http.result == {"かぎ"}
+	expect resp.http.result_raw == かぎ
+	expect resp.http.result_ascii == {"\u304b\u304e"}
+} -run

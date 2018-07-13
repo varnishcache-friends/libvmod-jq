@@ -1,0 +1,54 @@
+varnishtest "Test error handling"
+
+server s1 {
+	rxreq
+	txresp
+} -start
+
+varnish v1 -vcl+backend {
+	import jq from "${vmod_topbuild}/src/.libs/libvmod_jq.so";
+	import std;
+
+	sub vcl_recv {
+		std.cache_req_body(100B);
+	}
+
+	sub vcl_deliver {
+		jq.parse(string, req.http.nonexistent);
+		jq.parse(string, "[");
+		jq.parse(request, "something");
+		set resp.http.length0 = jq.length();
+		set resp.http.is_a = jq.is_a(invalid);
+		set resp.http.result = jq.get(".", "error");
+		jq.parse(string, "1");
+		set resp.http.length1 = jq.length();
+		jq.get(req.http.nonexistent, "error");
+		jq.get(".[", "error");
+		jq.get(".key", "error");
+	}
+} -start
+
+logexpect l1 -v v1 {
+	expect * * Error	{jq.parse: Missing input}
+	expect * * Error	{jq.parse: Unfinished JSON term at EOF at}
+	expect * * Debug	{jq.parse: Using request, input ignored}
+	expect * * Error	{jq.parse: Uncached or no request body}
+	expect * * Error	{jq.length: No context}
+	expect * * Error	{jq.is_a: No context}
+	expect * * Error	{jq.get: No context}
+	expect * * Debug	{jq.length: number type has no length}
+	expect * * Error	{jq.get: Missing filter}
+	expect * * Error	{jq.get: Invalid filter}
+	expect * * Error	{jq.get: Cannot index number with}
+} -start
+
+client c1 {
+	txreq
+	rxresp
+	expect resp.http.length0 == -1
+	expect resp.http.is_a == false
+	expect resp.http.result == error
+	expect resp.http.length1 == 0
+} -run
+
+logexpect l1 -wait

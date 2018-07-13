@@ -1,0 +1,19 @@
+dist: trusty
+sudo: required
+language: c
+compiler:
+  - clang
+  - gcc
+before_install:
+  - git clone --recursive https://github.com/stedolan/jq
+  - cd jq && autoreconf -vif &&
+    ./configure --with-oniguruma=builtin --disable-maintainer-mode &&
+    sudo make install && cd ..
+  - sudo apt-get update
+  - sudo apt-get install python-docutils
+  - git clone https://github.com/varnishcache/varnish-cache.git
+  - cd varnish-cache && ./autogen.sh && ./configure && make &&
+    sudo make install && sudo ldconfig && cd ..
+  - ./autogen.sh
+script:
+  - ./configure && make CFLAGS="-Wall -Wextra -Werror" VERBOSE=1 distcheck
