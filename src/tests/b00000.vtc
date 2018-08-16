@@ -16,7 +16,7 @@ varnish v1 -vcl+backend {
 	sub vcl_deliver {
 		jq.parse(string, "[1, 2, 3, 4, 5]");
 		set resp.http.length0 = jq.length();
-		jq.parse(request);
+		set resp.http.parse = jq.parse(request);
 		set resp.http.length1 = jq.length();
 		set resp.http.invalid = jq.is_a(invalid);
 		set resp.http.null = jq.is_a(null);
@@ -39,6 +39,7 @@ client c1 {
 	txreq -body {[{ "かぎ": null }, false, true, 1.0]}
 	rxresp
 	expect resp.http.length0 == 5
+	expect resp.http.parse == true
 	expect resp.http.length1 == 4
 	expect resp.http.invalid == false
 	expect resp.http.null == false

@@ -20,7 +20,7 @@ varnish v1 -vcl+backend {
 	sub vcl_deliver {
 		jq.parse(string, req.http.nonexistent);
 		jq.parse(string, "[");
-		jq.parse(request, "something");
+		set resp.http.parse = jq.parse(request, "something");
 		set resp.http.length0 = jq.length();
 		set resp.http.invalid = jq.is_a(invalid);
 		set resp.http.result = jq.get(".", "error");
@@ -50,6 +50,7 @@ logexpect l1 -v v1 {
 client c1 {
 	txreq
 	rxresp
+	expect resp.http.parse == false
 	expect resp.http.length0 == -1
 	expect resp.http.invalid == true
 	expect resp.http.result == error
