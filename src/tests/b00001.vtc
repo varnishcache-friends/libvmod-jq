@@ -22,7 +22,7 @@ varnish v1 -vcl+backend {
 		jq.parse(string, "[");
 		jq.parse(request, "something");
 		set resp.http.length0 = jq.length();
-		set resp.http.is_a = jq.is_a(invalid);
+		set resp.http.invalid = jq.is_a(invalid);
 		set resp.http.result = jq.get(".", "error");
 		jq.parse(string, "1");
 		set resp.http.length1 = jq.length();
@@ -51,7 +51,7 @@ client c1 {
 	txreq
 	rxresp
 	expect resp.http.length0 == -1
-	expect resp.http.is_a == false
+	expect resp.http.invalid == true
 	expect resp.http.result == error
 	expect resp.http.length1 == 0
 } -run

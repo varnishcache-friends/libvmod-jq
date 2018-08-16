@@ -215,7 +215,7 @@ vmod_is_a(VRT_CTX, struct vmod_priv *priv, VCL_ENUM e)
 	if (!vp) {
 		VSLb(ctx->vsl, SLT_Error,
 		    "jq.is_a: No context");
-		return (0);
+		return (!strcmp(e, "invalid"));
 	}
 
 	kind = jv_get_kind(vp->value);
