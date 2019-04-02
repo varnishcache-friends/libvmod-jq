@@ -9,6 +9,7 @@ addons:
     packages:
       - python3-docutils
       - python3-pip
+      - python3-sphinx
 install:
   - pip3 install pipenv
   - git clone --recursive https://github.com/stedolan/jq
