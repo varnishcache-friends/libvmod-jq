@@ -1,4 +1,4 @@
-AC_INIT([libvmod-jq], [0.2.0])
+AC_INIT([libvmod-jq], [0.3.0])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR(src/vmod_jq.vcc)
@@ -23,8 +23,11 @@ AM_CONDITIONAL(USE_LCOV, [test x$LCOV != x && test x$GENHTML != x])
 AC_SEARCH_LIBS([jq_init], [jq], [],
   AC_MSG_ERROR([jq is required.]))
 
-AM_PATH_PYTHON([2.7], [], [
-  AC_MSG_ERROR([Python 2.7 or later is required.])
+m4_define_default([_AM_PYTHON_INTERPRETER_LIST],
+  [python3.9 python3.8 python3.7 python3.6 python3.5 dnl
+   python3.4 python3 python])
+AM_PATH_PYTHON([3.4], [], [
+  AC_MSG_ERROR([Python 3.4 or later is required.])
 ])
 
 AC_PATH_PROGS([RST2MAN], [rst2man rst2man.py])

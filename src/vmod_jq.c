@@ -66,7 +66,7 @@ error_callback(void *ptr, jv value)
 }
 
 static int
-iter_req_body(void *priv, int flush, const void *ptr,
+iter_req_body(void *priv, unsigned flush, const void *ptr,
     ssize_t len)
 {
 	(void)flush;
@@ -80,6 +80,7 @@ vmod_parse(VRT_CTX, struct vmod_priv *priv, VCL_ENUM from, VCL_STRING s)
 {
 	struct vmod_jq *vp;
 	struct vsb *vsb;
+	uint64_t req_bodybytes;
 	jv value;
 
 	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
@@ -104,13 +105,15 @@ vmod_parse(VRT_CTX, struct vmod_priv *priv, VCL_ENUM from, VCL_STRING s)
 			return (0);
 		}
 
-		if (ctx->req->req_bodybytes <= 0) {
+		if (ctx->req->req_body_status != REQ_BODY_CACHED) {
 			VSLb(ctx->vsl, SLT_Error,
 			    "jq.parse: Uncached or no request body");
 			return (0);
 		}
 
-		vsb = VSB_new(NULL, NULL, ctx->req->req_bodybytes + 1, 0);
+		AZ(ObjGetU64(ctx->req->wrk, ctx->req->body_oc, OA_LEN,
+		    &req_bodybytes));
+		vsb = VSB_new(NULL, NULL, req_bodybytes + 1, 0);
 		AN(vsb);
 		if (VRB_Iterate(ctx->req, iter_req_body, vsb) == -1) {
 			VSLb(ctx->vsl, SLT_Error,
