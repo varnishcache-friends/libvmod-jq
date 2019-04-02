@@ -11,9 +11,10 @@ addons:
       - python3-pip
 install:
   - pip3 install pipenv
-  - cd docs && pipenv sync && cd ..
   - git clone --recursive https://github.com/stedolan/jq
-  - cd jq && autoreconf -vif &&
+  - cd jq &&
+    cd docs && pipenv sync && cd .. &&
+    autoreconf -vif &&
     ./configure --with-oniguruma=builtin --disable-maintainer-mode &&
     sudo env "PATH=$PATH" make install && cd ..
   - git clone https://github.com/varnishcache/varnish-cache.git
