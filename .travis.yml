@@ -7,8 +7,10 @@ compiler:
 addons:
   apt:
     packages:
-      - python-docutils
-before_install:
+      - python3-docutils
+      - python3-pip
+install:
+  - pip3 install pipenv
   - git clone --recursive https://github.com/stedolan/jq
   - cd jq && autoreconf -vif &&
     ./configure --with-oniguruma=builtin --disable-maintainer-mode &&
@@ -16,6 +18,7 @@ before_install:
   - git clone https://github.com/varnishcache/varnish-cache.git
   - cd varnish-cache && ./autogen.sh && ./configure && make &&
     sudo make install && sudo ldconfig && cd ..
+before_script:
   - ./autogen.sh
 script:
   - ./configure && make CFLAGS="-Wall -Wextra -Werror" VERBOSE=1 distcheck
