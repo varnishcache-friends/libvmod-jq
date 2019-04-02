@@ -11,6 +11,7 @@ addons:
       - python3-pip
 install:
   - pip3 install pipenv
+  - pipenv sync
   - git clone --recursive https://github.com/stedolan/jq
   - cd jq && autoreconf -vif &&
     ./configure --with-oniguruma=builtin --disable-maintainer-mode &&
