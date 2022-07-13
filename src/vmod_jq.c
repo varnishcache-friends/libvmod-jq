@@ -105,7 +105,7 @@ vmod_parse(VRT_CTX, struct vmod_priv *priv, VCL_ENUM from, VCL_STRING s)
 			return (0);
 		}
 
-		if (ctx->req->req_body_status != REQ_BODY_CACHED) {
+		if (ctx->req->req_body_status != BS_CACHED) {
 			VSLb(ctx->vsl, SLT_Error,
 			    "jq.parse: Uncached or no request body");
 			return (0);
@@ -113,18 +113,19 @@ vmod_parse(VRT_CTX, struct vmod_priv *priv, VCL_ENUM from, VCL_STRING s)
 
 		AZ(ObjGetU64(ctx->req->wrk, ctx->req->body_oc, OA_LEN,
 		    &req_bodybytes));
-		vsb = VSB_new(NULL, NULL, req_bodybytes + 1, 0);
+		vsb = VSB_new_auto();
 		AN(vsb);
-		if (VRB_Iterate(ctx->req, iter_req_body, vsb) == -1) {
+		if (VRB_Iterate(ctx->req->wrk, ctx->vsl, ctx->req,
+		    iter_req_body, vsb) == -1) {
 			VSLb(ctx->vsl, SLT_Error,
 			    "jq.parse: Problem fetching the body");
-			VSB_delete(vsb);
+			VSB_destroy(&vsb);
 			return (0);
 		}
 		AZ(VSB_finish(vsb));
 		assert(VSB_len(vsb) > 0);
 		value = jv_parse(VSB_data(vsb));
-		VSB_delete(vsb);
+		VSB_destroy(&vsb);
 	} else
 		WRONG("Illegal from");
 
