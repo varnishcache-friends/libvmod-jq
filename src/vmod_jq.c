@@ -56,7 +56,7 @@ cleanup(void *ptr)
 	jq_teardown(&vp->state);
 }
 
-static const struct vmod_priv_methods mymethods[1] = {{
+static const struct vmod_priv_methods vmod_jq_methods[1] = {{
 	.magic = VMOD_PRIV_METHODS_MAGIC,
 	.type = "jq",
 	.fini = cleanup
