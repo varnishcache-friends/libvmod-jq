@@ -56,6 +56,12 @@ cleanup(void *ptr)
 	jq_teardown(&vp->state);
 }
 
+static const struct vmod_priv_methods mymethods[1] = {{
+	.magic = VMOD_PRIV_METHODS_MAGIC,
+	.type = "jq",
+	.fini = cleanup
+}};
+
 static void
 error_callback(void *ptr, jv value)
 {
@@ -143,7 +149,7 @@ vmod_parse(VRT_CTX, struct vmod_priv *priv, VCL_ENUM from, VCL_STRING s)
 		AN(vp);
 		INIT_OBJ(vp, VMOD_JQ_MAGIC);
 		priv->priv = vp;
-		priv->free = cleanup;
+		griv->methods = vmod_jq_methods;
 	} else {
 		AN(jv_get_refcnt(vp->value) == 1);
 		jv_free(vp->value);
