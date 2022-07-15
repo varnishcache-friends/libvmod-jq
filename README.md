@@ -14,7 +14,7 @@ To build this VMOD you will need:
 * make
 * a C compiler, e.g. GCC or clang
 * pkg-config
-* python-docutils or docutils in macOS [1]
+* python3-docutils or docutils in macOS [1]
 * Varnish master built from sources
 * libjq-dev in recent Debian/Ubuntu releases, jq in macOS [1]. See
   also https://github.com/stedolan/jq
