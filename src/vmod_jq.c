@@ -149,7 +149,7 @@ vmod_parse(VRT_CTX, struct vmod_priv *priv, VCL_ENUM from, VCL_STRING s)
 		AN(vp);
 		INIT_OBJ(vp, VMOD_JQ_MAGIC);
 		priv->priv = vp;
-		griv->methods = vmod_jq_methods;
+		priv->methods = vmod_jq_methods;
 	} else {
 		AN(jv_get_refcnt(vp->value) == 1);
 		jv_free(vp->value);
