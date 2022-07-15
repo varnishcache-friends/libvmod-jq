@@ -51,7 +51,7 @@ cleanup(VRT_CTX, void *priv)
 	struct vmod_jq *vp;
 
 	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
-	CAST_OBJ_NOTNULL(vp, priv, PRIV_JQ_MAGIC);
+	CAST_OBJ_NOTNULL(vp, priv, VMOD_JQ_MAGIC);
 	AN(jv_get_refcnt(vp->value) == 1);
 	jv_free(vp->value);
 	jq_teardown(&vp->state);
