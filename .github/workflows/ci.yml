@@ -1,11 +1,15 @@
 name: ci
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "11 3 * * 6"
 
 jobs:
   test:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     strategy:
       matrix:
@@ -16,7 +20,7 @@ jobs:
       with:
         submodules: recursive
     - name: apt-get
-      run: sudo apt-get install -y libedit-dev lcov python3-docutils python3-sphinx
+      run: sudo apt-get install -y lcov libedit-dev python3-docutils python3-sphinx
     - name: prereq
       run: |
         pip3 install pipenv
@@ -40,6 +44,9 @@ jobs:
       continue-on-error: true
     - name: codecov
       if: matrix.compiler == 'gcc'
-      run: curl -s https://codecov.io/bash | bash -s -- -t ${{ secrets.CODECOV_TOKEN }}
+      run: |
+        curl -Os https://uploader.codecov.io/latest/linux/codecov
+        chmod +x codecov
+        ./codecov -v -f src/.libs/libvmod-geoip2.info -t ${{ secrets.CODECOV_TOKEN }}
     - name: make distcheck
       run: make distcheck
