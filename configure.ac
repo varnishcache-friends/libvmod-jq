@@ -2,15 +2,15 @@ AC_INIT([libvmod-jq], [0.3.0])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_SRCDIR(src/vmod_jq.vcc)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 m4_ifndef([VARNISH_VMOD_INCLUDES], AC_MSG_ERROR([varnish.m4 is required.]))
 
 AM_INIT_AUTOMAKE([foreign color-tests parallel-tests])
 
 AC_DISABLE_STATIC
 
-AC_PROG_CC_C99
-AC_PROG_LIBTOOL
+AC_PROG_CC
+LT_INIT
 
 AC_ARG_ENABLE([gcov],
   [AS_HELP_STRING([--enable-gcov],
@@ -26,7 +26,7 @@ AC_SEARCH_LIBS([jq_init], [jq], [],
   AC_MSG_ERROR([jq is required.]))
 
 m4_define_default([_AM_PYTHON_INTERPRETER_LIST],
-  [python3.9 python3.8 python3.7 python3.6 python3.5 dnl
+  [python3.10 python3.9 python3.8 python3.7 python3.6 python3.5 dnl
    python3.4 python3 python])
 AM_PATH_PYTHON([3.4], [], [
   AC_MSG_ERROR([Python 3.4 or later is required.])
