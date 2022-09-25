@@ -1,7 +1,7 @@
 libvmod-jq
 ==========
 
-[![ci](https://github.com/fgsch/libvmod-jq/actions/workflows/ci.yml/badge.svg?branch=devel)](https://github.com/fgsch/libvmod-jq/actions/workflows/ci.yml)
+[![ci](https://github.com/varnishcache-friends/libvmod-jq/actions/workflows/ci.yml/badge.svg?branch=devel)](https://github.com/varnishcache-friends/libvmod-jq/actions/workflows/ci.yml)
 
 ## About
 
@@ -54,7 +54,7 @@ tests are passing on your platform.
 To install from Git, clone this repository by running:
 
 ```
-git clone --recursive https://github.com/fgsch/libvmod-jq
+git clone --recursive https://github.com/varnishcache-friends/libvmod-jq
 ```
 
 And then run `./autogen.sh` followed by the instructions above for
