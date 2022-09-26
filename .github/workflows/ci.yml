@@ -49,4 +49,4 @@ jobs:
         chmod +x codecov
         ./codecov -v -f src/.libs/libvmod-jq.info -t ${{ secrets.CODECOV_TOKEN }}
     - name: make distcheck
-      run: make distcheck
+      run: make distcheck VERBOSE=1
