@@ -2,6 +2,7 @@ libvmod-jq
 ==========
 
 [![ci](https://github.com/varnishcache-friends/libvmod-jq/actions/workflows/ci.yml/badge.svg?branch=devel)](https://github.com/varnishcache-friends/libvmod-jq/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/varnishcache-friends/libvmod-jq/branch/devel/graph/badge.svg?token=wk0jBR2Czk)](https://codecov.io/gh/varnishcache-friends/libvmod-jq)
 
 ## About
 
