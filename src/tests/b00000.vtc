@@ -32,6 +32,10 @@ varnish v1 -vcl+backend {
 		    jq.get(".[0] | to_entries[] | .key", "error", raw=true);
 		set resp.http.result_ascii =
 		    jq.get(".[0] | to_entries[] | .key", "error", ascii=true);
+		jq.parse(string, {""ストリング""});
+		set resp.http.length2 = jq.length();
+		jq.parse(string, """{"かぎ":"あたい"}""");
+		set resp.http.length3 = jq.length();
 	}
 } -start
 
@@ -52,4 +56,6 @@ client c1 {
 	expect resp.http.result == {"かぎ"}
 	expect resp.http.result_raw == かぎ
 	expect resp.http.result_ascii == {"\u304b\u304e"}
+	expect resp.http.length2 == 5
+	expect resp.http.length3 == 1
 } -run
