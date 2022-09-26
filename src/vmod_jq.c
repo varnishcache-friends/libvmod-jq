@@ -272,7 +272,7 @@ vmod_length(VRT_CTX, struct vmod_priv *priv)
 		return (-1);
 
 	case JV_KIND_STRING:
-		return (jv_string_length_bytes(jv_copy(vp->value)));
+		return (jv_string_length_codepoints(jv_copy(vp->value)));
 
 	case JV_KIND_ARRAY:
 		return (jv_array_length(jv_copy(vp->value)));
