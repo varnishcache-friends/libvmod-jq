@@ -47,6 +47,6 @@ jobs:
       run: |
         curl -Os https://uploader.codecov.io/latest/linux/codecov
         chmod +x codecov
-        ./codecov -v -f src/.libs/libvmod-geoip2.info -t ${{ secrets.CODECOV_TOKEN }}
+        ./codecov -v -f src/.libs/libvmod-jq.info -t ${{ secrets.CODECOV_TOKEN }}
     - name: make distcheck
       run: make distcheck
